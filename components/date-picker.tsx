@@ -1,8 +1,8 @@
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { format } from "date-fns"
-import { ChevronDown } from "lucide-react"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { ChevronDown } from "lucide-react";
 
 interface DatePickerProps {
   tripType: string;
@@ -13,13 +13,13 @@ interface DatePickerProps {
 export default function DatePicker({ tripType, dates, setDates }: DatePickerProps) {
   const formatDateRange = (startDate: Date | undefined, endDate: Date | undefined) => {
     if (startDate && endDate) {
-      return `${format(startDate, "EEE, MMM d")} - ${format(endDate, "EEE, MMM d")}`
+      return `${format(startDate, "EEE, MMM d")} - ${format(endDate, "EEE, MMM d")}`;
     } else if (startDate) {
-      return format(startDate, "EEE, MMM d")
+      return format(startDate, "EEE, MMM d");
     } else {
-      return "Select dates"
+      return "Select dates";
     }
-  }
+  };
 
   return (
     <Popover>
@@ -38,7 +38,7 @@ export default function DatePicker({ tripType, dates, setDates }: DatePickerProp
           selected={tripType === "roundTrip" ? { from: dates.startDate, to: dates.endDate } : dates.startDate}
           onSelect={(selection) => {
             if (tripType === "roundTrip") {
-              const { from, to } = selection as { from: Date | undefined, to: Date | undefined }
+              const { from, to } = selection as { from: Date | undefined, to: Date | undefined };
               setDates({ startDate: from, endDate: to });
             } else {
               setDates({ startDate: selection as Date, endDate: undefined });

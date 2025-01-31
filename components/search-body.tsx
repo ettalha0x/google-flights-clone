@@ -10,7 +10,6 @@ interface SearchBodyProps {
   setOrigin: (origin: string) => void;
   destination: string;
   setDestination: (destination: string) => void;
-  airports: { code: string; name: string; city: string }[];
 }
 
 export default function SearchBody({
@@ -21,12 +20,11 @@ export default function SearchBody({
   setOrigin,
   destination,
   setDestination,
-  airports,
 }: SearchBodyProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <OriginPicker origin={origin} setOrigin={setOrigin} airports={airports} />
-      <DestinationPicker destination={destination} setDestination={setDestination} airports={airports} />
+      <OriginPicker origin={origin} setOrigin={setOrigin}/>
+      <DestinationPicker destination={destination} setDestination={setDestination} />
       <DatePicker tripType={tripType} dates={dates} setDates={setDates} />
     </div>
   );

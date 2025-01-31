@@ -57,7 +57,6 @@ export default function SearchForm() {
         setOrigin={setOrigin}
         destination={destination}
         setDestination={setDestination}
-        airports={airports}
       />
     </div>
   )
