@@ -4,8 +4,8 @@ import DatePicker from "./date-picker";
 
 interface SearchBodyProps {
   tripType: string;
-  dates: { startDate: Date | undefined, endDate: Date | undefined };
-  setDates: (dates: { startDate: Date | undefined, endDate: Date | undefined }) => void;
+  dates: { from: Date | undefined, to: Date | undefined };
+  setDates: (dates: { from: Date | undefined, to: Date | undefined }) => void;
   origin: string;
   setOrigin: (origin: string) => void;
   destination: string;

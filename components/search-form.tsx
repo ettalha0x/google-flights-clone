@@ -3,6 +3,8 @@
 import { useState } from "react"
 import SearchHeader from "./search-header"
 import SearchBody from "./search-body"
+import { addDays } from "date-fns"
+import { DateRange } from "react-day-picker"
 
 // Mock data for airports
 const airports = [
@@ -18,7 +20,10 @@ export default function SearchForm() {
   const [cabinClass, setCabinClass] = useState("ECONOMY")
   const [origin, setOrigin] = useState("")
   const [destination, setDestination] = useState("")
-  const [dates, setDates] = useState<{ startDate: Date | undefined, endDate: Date | undefined }>({ startDate: undefined, endDate: undefined })
+  const [dates, setDates] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: addDays(new Date(), 20),
+  });
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
@@ -34,7 +39,7 @@ export default function SearchForm() {
     if (label === 'Children' && children > 0) setChildren((prev) => prev - 1);
     if (label === 'Infants' && infants > 0) setInfants((prev) => prev - 1);
   }
-
+console.log('dates : ', dates);
   return (
     <div className="space-y-4">
       <SearchHeader
