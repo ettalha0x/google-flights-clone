@@ -3,11 +3,11 @@ import { ChevronDown } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import searchAirport from "@/hooks/searchAirport";
-import { Airport } from "@/hooks/searchAirport";
+import { Place } from "./search-form";
 
 interface DestinationPickerProps {
-  destination: string;
-  setDestination: (destination: string) => void;
+  destination: Place;
+  setDestination: (destination: Place) => void;
 }
 
 export default function DestinationPicker({ destination, setDestination}: DestinationPickerProps) {
@@ -21,7 +21,7 @@ export default function DestinationPicker({ destination, setDestination}: Destin
           variant="outline"
           className="w-full h-14 justify-start pl-12 bg-[#303134] border-0 text-left text-lg font-normal text-white hover:bg-[#3c4043]"
         >
-          {destination || "Where to?"}
+          {destination.name || "Where to?"}
           <ChevronDown className="ml-auto h-5 w-5 text-gray-400" />
         </Button>
       </PopoverTrigger>
@@ -41,7 +41,7 @@ export default function DestinationPicker({ destination, setDestination}: Destin
               key={airport.skyId}
               variant="ghost"
               className="w-full justify-start px-4 py-6 hover:bg-[#3c4043]"
-              onClick={() => setDestination(airport.presentation.suggestionTitle)}
+              onClick={() => setDestination({name: airport.presentation.suggestionTitle, SkyId: airport.skyId, EntityId: airport.entityId})}
             >
               <div className="text-left">
                 <div className="font-medium">{airport.presentation.suggestionTitle}</div>

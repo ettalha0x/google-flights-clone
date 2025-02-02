@@ -3,65 +3,81 @@
 import { useState } from "react"
 import SearchHeader from "./search-header"
 import SearchBody from "./search-body"
-import { addDays } from "date-fns"
-import { DateRange } from "react-day-picker"
+import { addDays, set } from "date-fns"
 
-// Mock data for airports
-const airports = [
-  { code: "TNG", name: "Tangier Ibn Battouta", city: "Tangier, Morocco" },
-  { code: "LHR", name: "Heathrow", city: "London, United Kingdom" },
-  { code: "CDG", name: "Charles de Gaulle", city: "Paris, France" },
-  { code: "MAD", name: "Adolfo Suárez Madrid–Barajas", city: "Madrid, Spain" },
-  { code: "BCN", name: "Josep Tarradellas Barcelona-El Prat", city: "Barcelona, Spain" },
-]
+export interface Place {
+  name?: string;
+  SkyId: string;
+  EntityId: string;
+}
+
+export interface Passenger {
+  adults: number;
+  children: number;
+  infants: number;
+}
+
+export interface SearchFormProps {
+  tripType: string;
+  setTripType: (tripType: string) => void;
+  cabinClass: string;
+  setCabinClass: (cabinClass: string) => void;
+  passengers: Passenger;
+  setPassengers: (passengers: Passenger) => void;
+  dates: { from: Date | undefined, to: Date | undefined };
+  setDates: (dates: { from: Date | undefined, to: Date | undefined }) => void;
+  origin: Place;
+  setOrigin: (origin: Place) => void;
+  destination: Place;
+  setDestination: (destination: Place) => void;
+}
 
 export default function SearchForm() {
-  const [tripType, setTripType] = useState("roundTrip")
-  const [cabinClass, setCabinClass] = useState("ECONOMY")
-  const [origin, setOrigin] = useState("")
-  const [destination, setDestination] = useState("")
-  const [dates, setDates] = useState<DateRange | undefined>({
+  const [tripType, setTripType] = useState<SearchFormProps['tripType']>("")
+  const [cabinClass, setCabinClass] = useState<SearchFormProps['cabinClass']>("")
+  const [origin, setOrigin] = useState<Place>({SkyId: "", EntityId: ""})
+  const [destination, setDestination] = useState<Place>({SkyId: "", EntityId: ""})
+  const [dates, setDates] = useState<{ from: Date | undefined, to: Date | undefined }>({
     from: new Date(),
-    to: addDays(new Date(), 20),
+    to: addDays(new Date(), 7),
   });
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
-  const [infants, setInfants] = useState(0);
+
+  const [passengers, setPassengers] = useState<Passenger>({ adults: 1, children: 0, infants: 0 });
 
   const increment = (label: string) => {
-    if (label === 'Adults') setAdults((prev) => prev + 1);
-    if (label === 'Children') setChildren((prev) => prev + 1);
-    if (label === 'Infants') setInfants((prev) => prev + 1);
+    if (label === 'Adults') setPassengers((prev) => ({ ...prev, adults: prev.adults + 1 }));
+    if (label === 'Children' && passengers.adults > 0) setPassengers((prev) => ({ ...prev, children: prev.children + 1 }));
+    if (label === 'Infants' && passengers.adults > 0) setPassengers((prev) => ({ ...prev, infants: prev.infants + 1 }));
   }
 
   const decrement = (label: string) => {
-    if (label === 'Adults' && adults > 0) setAdults((prev) => prev - 1);
-    if (label === 'Children' && children > 0) setChildren((prev) => prev - 1);
-    if (label === 'Infants' && infants > 0) setInfants((prev) => prev - 1);
+    if (label === 'Adults' && passengers.adults > 0) setPassengers((prev) => ({ ...prev, adults: prev.adults - 1 }));
+    if (label === 'Children' && passengers.children > 0) setPassengers((prev) => ({ ...prev, children: prev.children - 1 }));
+    if (label === 'Infants' && passengers.infants > 0) setPassengers((prev) => ({ ...prev, infants: prev.infants - 1 }));
   }
-console.log('dates : ', dates);
+
+  console.log('dates : ', dates);
   return (
     <div className="space-y-4">
       <SearchHeader
         tripType={tripType}
         setTripType={setTripType}
-        adults={adults}
-        children={children}
-        infants={infants}
-        increment={increment}
-        decrement={decrement}
         cabinClass={cabinClass}
         setCabinClass={setCabinClass}
+        passengers={passengers}
+        setPassengers={setPassengers}
+        increment={increment}
+        decrement={decrement}
       />
 
       <SearchBody
         tripType={tripType}
-        dates={dates}
-        setDates={setDates}
         origin={origin}
         setOrigin={setOrigin}
         destination={destination}
         setDestination={setDestination}
+        dates={dates}
+        setDates={setDates}
       />
     </div>
   )
