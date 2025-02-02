@@ -59,8 +59,8 @@ const searchAirport = (query: string) => {
           locale: 'en-US'
         },
         headers: {
-          'x-rapidapi-key': process.env.RAPIDAPI_KEY,
-          'x-rapidapi-host': process.env.RAPIDAPI_HOST
+          'x-rapidapi-key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
+          'x-rapidapi-host': process.env.NEXT_PUBLIC_RAPIDAPI_HOST
         }
       };
 
