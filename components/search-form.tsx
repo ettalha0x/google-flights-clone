@@ -24,39 +24,18 @@ export interface SearchFormProps {
   setCabinClass: (cabinClass: string) => void;
   passengers: Passenger;
   setPassengers: (passengers: Passenger) => void;
-  dates: { from: Date | undefined, to: Date | undefined };
-  setDates: (dates: { from: Date | undefined, to: Date | undefined }) => void;
+  dates: { from: string, to: string };
+  setDates: (dates: { from: string, to: string} ) => void;
   origin: Place;
   setOrigin: (origin: Place) => void;
   destination: Place;
   setDestination: (destination: Place) => void;
+  increment: (label: string) => void;
+  decrement: (label: string) => void;
 }
 
-export default function SearchForm() {
-  const [tripType, setTripType] = useState<SearchFormProps['tripType']>("")
-  const [cabinClass, setCabinClass] = useState<SearchFormProps['cabinClass']>("")
-  const [origin, setOrigin] = useState<Place>({SkyId: "", EntityId: ""})
-  const [destination, setDestination] = useState<Place>({SkyId: "", EntityId: ""})
-  const [dates, setDates] = useState<{ from: Date | undefined, to: Date | undefined }>({
-    from: new Date(),
-    to: addDays(new Date(), 7),
-  });
+export default function SearchForm( { tripType, setTripType, cabinClass, setCabinClass, passengers, setPassengers, origin, setOrigin, destination, setDestination, dates, setDates, increment, decrement}: SearchFormProps) {
 
-  const [passengers, setPassengers] = useState<Passenger>({ adults: 1, children: 0, infants: 0 });
-
-  const increment = (label: string) => {
-    if (label === 'Adults') setPassengers((prev) => ({ ...prev, adults: prev.adults + 1 }));
-    if (label === 'Children' && passengers.adults > 0) setPassengers((prev) => ({ ...prev, children: prev.children + 1 }));
-    if (label === 'Infants' && passengers.adults > 0) setPassengers((prev) => ({ ...prev, infants: prev.infants + 1 }));
-  }
-
-  const decrement = (label: string) => {
-    if (label === 'Adults' && passengers.adults > 0) setPassengers((prev) => ({ ...prev, adults: prev.adults - 1 }));
-    if (label === 'Children' && passengers.children > 0) setPassengers((prev) => ({ ...prev, children: prev.children - 1 }));
-    if (label === 'Infants' && passengers.infants > 0) setPassengers((prev) => ({ ...prev, infants: prev.infants - 1 }));
-  }
-
-  console.log('dates : ', dates);
   return (
     <div className="space-y-4">
       <SearchHeader
@@ -69,7 +48,7 @@ export default function SearchForm() {
         increment={increment}
         decrement={decrement}
       />
-
+      
       <SearchBody
         tripType={tripType}
         origin={origin}

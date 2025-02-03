@@ -1,51 +1,35 @@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { addDays, format } from "date-fns";
+import { addDays, format, parse} from "date-fns";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
-import { DateRange } from "react-day-picker";
+
+interface DateRange {
+  from: string;
+  to: string;
+}
 
 interface DatePickerProps {
   tripType: string;
-  dates: { from: Date | undefined, to: Date | undefined };
-  setDates: (dates: { from: Date | undefined, to: Date | undefined }) => void;
+  dates: { from: string, to: string };
+  setDates: (dates: { from: string, to: string }) => void;
 }
 
 export default function DatePicker({ tripType, dates, setDates }: DatePickerProps) {
-  const [dateSingle, setDateSingle] = useState<Date>()
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 20),
+  const [dateSingle, setDateSingle] = useState<string>()
+  const [dateRange, setDateRange] = useState<DateRange | {from: '', to: ''}>({
+    from: format(new Date(), 'MM/dd/yyyy'),
+    to: format(addDays(new Date(), 7), 'MM/dd/yyyy'),
   })
 
-  // useEffect(() => {
-  //     if (tripType === 'roundTrip')
-  //     {
-  //       setDates(
-  //       {
-  //         startDate: dates.from,
-  //         endDate: dates.to
-  //       })
-  //     }
-  //     else
-  //     {
-  //       setDates({
-  //         startDate: dateSingle,
-  //         endDate: undefined
-  //       })
-  //     }
-  // }, [dateSingle, dateRange]);
-  const formatDateRange = (startDate: Date | undefined, endDate: Date | undefined) => {
-    if (startDate && endDate) {
-      return `${format(startDate, "EEE, MMM d")} - ${format(endDate, "EEE, MMM d")}`;
-    } else if (startDate) {
-      return format(startDate, "EEE, MMM d");
-    } else {
-      return "Select dates";
-    }
+  const getDateRange = () => {
+    return {
+      from: dates.from ? parse(dates.from, 'MM/dd/yyyy', new Date()) : undefined,
+      to: dates.to ? parse(dates.to, 'MM/dd/yyyy', new Date()) : undefined,
+    };
   };
-console.log('dates', dates);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -80,17 +64,18 @@ console.log('dates', dates);
           <Calendar
             // initialFocus
             mode="range"
-            defaultMonth={dates.from}
-            selected={dates}
-            onSelect={(range)=> setDates({from: range?.from, to: range?.to})}
+            defaultMonth={parse(dates.from, 'MM/dd/yyyy', new Date())}
+            selected={getDateRange()}
+            // onSelect={(range)=> setDates({from: range?.from, to: range?.to})}
+            onSelect={(range) => setDates({ from: format(range?.from || new Date(), 'MM/dd/yyyy'), to: range?.to ? format(range.to, 'MM/dd/yyyy') : '' })}
             // disabled={(date)=> date.getDate()< new Date()}
             styles={{ head_cell : {color: 'white'}, cell: {color: 'white'}, caption_label: {color: 'white'}}}
           />
             :
-            <Calendar
+          <Calendar
             mode="single"
-            selected={dates.from}
-            onSelect={(date) => setDates({from: date, to: undefined})}
+            selected={dates.from.length == 0 ? parse(dates.from, 'MM/dd/yyyy', new Date()) : undefined}
+            onSelect={(date) => setDates({from: format(dates.from, 'MM/dd/yyyy'), to: ""})}
             // initialFocus
           />
         }

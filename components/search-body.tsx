@@ -10,8 +10,8 @@ interface SearchBodyProps {
   setOrigin: (origin: Place) => void;
   destination: Place;
   setDestination: (destination: Place) => void;
-  dates: { from: Date | undefined, to: Date | undefined };
-  setDates: (dates: { from: Date | undefined, to: Date | undefined }) => void;
+  dates: { from: string, to: string};
+  setDates: (dates: { from: string, to: string }) => void;
 }
 
 export default function SearchBody({
